@@ -16,13 +16,12 @@ var minutes = Math.floor(timer / inter);
 var seconds = timer % inter;
 
 var mode = localStorage.getItem("modeValue");
+
 function preload()
 {
-	theme = loadSound("./Sounds/theme3.ogg");
-	gameFont = loadFont("PressStart2P-Regular.ttf");
-	success = loadSound("./Sounds/click success.wav");
-	fail = loadSound("./Sounds/click fail.wav");
-	volumeImage = loadImage("./Images/volumeButton1.png");
+	theme = loadSound("./Assets/Sounds/thememain.wav");
+	success = loadSound("./Assets/Sounds/clicksuccess.wav");
+	fail = loadSound("./Assets/Sounds/clickfail.wav");
 }
 
 function setup()

@@ -13,6 +13,7 @@ function preload()
   menuTheme = loadSound("./Assets/Sounds/theme 1.wav");
   Unmute = loadImage("./Assets/Images/VolumeButton1.png");
   Mute = loadImage("./Assets/Images/VolumeButton2.png");
+
   star = new Star();
 }
 
@@ -29,6 +30,8 @@ function setup()
     stars[i] = new Star();
     stars[i].speed = speed;
   }
+
+  image(Mute, 100, 100);
 
   menuTheme.setVolume(0.1);
   menuTheme.loop();
@@ -54,6 +57,7 @@ function setup()
 function draw()
 {
 	background(0);
+
   translate(width / 2, height / 2);
   for(let i = 0; i < stars.length; i++)
   {
@@ -67,7 +71,6 @@ function draw()
   textFont(font);
   text('ODDBALL', 0, -height/8);
   translate(width / 2 - width / 2 , height / 2 - height / 2);
-  image(Mute, width - 100, height - 100);
 
 }
 
@@ -105,6 +108,7 @@ function clicked(){
 				Mute = loadImage ("./Assets/Images/VolumeButton1.png");
 				console.log(this.isMuted);
 		    this.isMuted = true;
+        localStorage.setItem("isMutedValue", this.isMuted);
 			}
 			else
 			{
@@ -112,6 +116,7 @@ function clicked(){
 				Mute = loadImage ("./Assets/Images/VolumeButton2.png");
 				console.log(this.isMuted);
 				this.isMuted = false;
+        localStorage.setItem("isMutedValue", this.isMuted);
 			}
 		}
 }
