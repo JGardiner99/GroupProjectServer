@@ -151,13 +151,10 @@ class Ball
 		this.yspeed = 0;
 		this.xspeedbool = 0;
 		this.yspeedbool = 0;
-		this.r;
+		this.r = 75;
 		this.isMuted = new Boolean(false);
 		this.fadeR, this.fadeB = 255;
 		this.fadeG = 255;
-		this.xoff = 0.0;
-		this.xincrement = 0.01;
-		this.n = noise(this.xoff) * 50;
 		this.reset();
 	}
 
@@ -261,37 +258,43 @@ class Ball
 				score = score + 1;
 				if(score => 0)
 				{
-					this.r = 50;
 					if(score > 5)
 					{
-						this.r = random(25, 75);
+						this.xspeed = this.xspeed * 1.05;
+						this.yspeed = this.yspeed * 1.05;
+						this.r = random(50, 75);
 						if(score > 10)
 						{
-							this.xspeed = this.xspeed * 1.2;
-							this.yspeed = this.yspeed * 1.2;
+							this.xspeed = this.xspeed * 1.05;
+							this.yspeed = this.yspeed * 1.05;
+
 							this.fadeR = random(100, 150);
 							this.fadeB = random(100, 150);
 							this.fadeG = random(100, 150);
 								if(score > 15)
 								{
-									 this.xspeed = this.xspeed * 1.2;
-									 this.yspeed = this.yspeed * 1.2;
-									 this.r = random(25, 75);
+									this.xspeed = this.xspeed * 1.05;
+									this.yspeed = this.yspeed * 1.05;
+									 this.r = random(25, 50);
 									if(score > 20)
 									{
+										this.xspeed = this.xspeed * 1.05;
+										this.yspeed = this.yspeed * 1.05;
+
 										this.fadeR = random(50, 100);
 										this.fadeB = random(50, 100);
 										this.fadeG = random(50, 100);
 											if(score > 25)
 											{
-												this.r = 50;
-												sineWave()
-												{
-													this.r = this.n;
-													this.xoff += this.xincrement;
-												}
+												this.xspeed = this.xspeed * 1.05;
+												this.yspeed = this.yspeed * 1.05;
+
+												this.r = 10;
 												if(score > 30)
 												{
+													this.xspeed = this.xspeed * 1.05;
+													this.yspeed = this.yspeed * 1.05;
+													
 													this.fadeR = random(5, 15);
 													this.fadeB = random(5, 15);
 													this.fadeG = random(5, 15);
@@ -340,8 +343,6 @@ class Ball
 				}
 			}
 		}
-
-
 	}
 }
 //https://codepen.io/rndm/pen/ozZzry
