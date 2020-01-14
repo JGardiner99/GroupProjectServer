@@ -5,8 +5,6 @@ var fail;
 var volumeButtonUnmute;
 var volumeButtonMute;
 var showImage;
-let stars = [];
-let speed;
 
 var score = 0;
 var timeElapsed = 0;
@@ -32,45 +30,20 @@ function setup()
 	document.body.style.overflow = 'hidden';
 	createCanvas(windowWidth, windowHeight);
 
+	let starsAmount = width / 2;
+	let speed = 30;
+
+	for(let i = 0; i < starsAmount; i++)
+	{
+		stars[i] = new Star();
+		stars[i].speed = speed;
+	}
+
 	theme.setVolume(0.15);
 	success.setVolume(0.5);
 	fail.setVolume(0.75);
 	theme.loop();
 
-	function Star()
-	{
-		this.x = random(-width, width);
-		this.y = random(-height, height);
-		this.z = random(width);
-
-		this.display = function()
-		{
-
-		noStroke();
-		fill(255);
-		let sx = map(this.x / this.z, 0, 1, 0, width/2);
-		let sy = map(this.y / this.z, 0, 1, 0, height/2);
-		let r = map(this.z, 0, width, 12, 0);
-		ellipse(sx, sy, r, r);
-		} // display
-
-		this.update = function()
-		{
-			this.z -= speed;
-
-			if(this.z < 1)
-			{
-				this.z = width;
-				this.x = random(-width, width);
-				this.y = random(-height, height);
-			}
-		} // update
-	} // Star
-
-	for(let i = 0; i < 500; i += 1)
-	{
-	stars[i] = new Star();
-	}
 	volumeImage.resize(100, 100);
 
 	ball = new Ball();
@@ -86,10 +59,10 @@ function draw()
 	translate(width/2, height/2);
 	speed = map(timeElapsed * 50, 0, width, 2, 20);
 
-	for(let i = 0; i < stars.length; i += 1)
+	for(let i = 0; i < stars.length; i++)
 	{
-		stars[i].display();
 		stars[i].update();
+		stars[i].show();
 	}
 
 	translate(-width/2, -height/2);

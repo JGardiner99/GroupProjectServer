@@ -1,0 +1,47 @@
+@font-face {
+   font-family: myFirstFont;
+   src: url(PressStart2P-Regular.ttf);
+}
+* {
+   font-family: myFirstFont;
+}
+body{
+	padding:0;
+	margin:0;
+	background-color:#000;
+}
+h1{
+	color:#6B84E8;
+	padding-top:30vh;
+	font-size:10vw;
+	width:100vw;
+	height:10vh;
+	text-align:center;
+	margin:0 auto;
+	text-shadow:
+    2px 2px 0 #C32020,
+    -2px -2px 0 #C32020,  
+    2px -2px 0 #C32020,
+    -2px 2px 0 #C32020,
+    2px 2px 0 #C32020;
+	margin-bottom:9vh;
+}
+button{
+	width:100vw;
+	height:5vh;
+	font-size:1.5vw;
+	text-align:center;
+	margin:0 auto;
+	background-color:rgba(0,0,0,0);
+	color:#EFDE88;
+	text-decoration:none;
+	border:none;
+}
+a{
+	width:100vw;
+	height:10vh;
+	text-align:center;
+	margin:0 auto;
+	color:#EFDE88;
+	text-decoration:none;
+}
