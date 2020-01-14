@@ -6,12 +6,14 @@ function setup()
 	document.body.style.overflow = 'hidden';
 
   widthAmount = width / 3;
-
+  gameData = new GameData();
 }
 
 function draw()
 {
 	background(0);
+  fill(255);
+  rect(width/2, 0, width / 2, height);
 }
 
 function windowResized()
@@ -23,14 +25,14 @@ function mousePressed()
 {
   if(mouseX > width / 2)
     {
-      background(0, 0, 255);
-      mode = 1;
-    }
-    else
-    {
-      background(255, 0, 0);
-      mode = 2;
-    }
-
-    window.location.href = "index.html";
+        mode = 1;
+        localStorage.setItem("modeValue", mode);
+        window.location.href = "index.html";
+      }
+      else
+      {
+        mode = 2;
+        localStorage.setItem("modeValue", mode);
+        window.location.href = "index.html";
+      }
 }

@@ -17,8 +17,7 @@ var inter = 60;
 var minutes = Math.floor(timer / inter);
 var seconds = timer % inter;
 
-var mode = 0;
-
+var mode = localStorage.getItem("modeValue");
 function preload()
 {
 	theme = loadSound("./Sounds/theme3.ogg");
@@ -74,9 +73,9 @@ function setup()
 	}
 	volumeImage.resize(100, 100);
 
-	console.log("mode type: " + mode);
-
 	ball = new Ball();
+
+	console.log("mode type: " + mode);
 }
 
 function draw()
