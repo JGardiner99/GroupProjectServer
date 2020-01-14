@@ -10,12 +10,14 @@ let speed;
 
 var score = 0;
 var timeElapsed = 0;
-var miss = 10;
+var miss = 15;
 
 let timer = 120;
 var inter = 60;
 var minutes = Math.floor(timer / inter);
 var seconds = timer % inter;
+
+var mode = 0;
 
 function preload()
 {
@@ -72,6 +74,8 @@ function setup()
 	}
 	volumeImage.resize(100, 100);
 
+	console.log("mode type: " + mode);
+
 	ball = new Ball();
 }
 
@@ -91,19 +95,10 @@ function draw()
 
 	translate(-width/2, -height/2);
 
-	if(frameCount % 60 == 0 && timer > 0)
-	{
-		timer--;
-		minutes = Math.floor(timer / inter);
-		seconds = timer % inter;
-
-		timeElapsed += 1;
-	}
-
 
 	if(timer == 0)
 	{
-		window.location.replace("menu.html");
+		window.location.replace("gameOver.html");
 	}
 
 	ball.update();
@@ -123,11 +118,25 @@ function draw()
 		}
 		else
 		{
-			text("Time Remaining: " + minutes + ":0" + seconds, -405, 30);
+			text("Time Remaining: " + minutes + ":0" + seconds, width -405, 30);
 		}
+
+
+			if(frameCount % 60 == 0 && timer > 0)
+			{
+				timer--;
+				minutes = Math.floor(timer / inter);
+				seconds = timer % inter;
+
+				timeElapsed += 1;
+			}
 			noStroke();
 		image(volumeImage, width - 100, height - 100);
 
+		if(score >= 60)
+		{
+			ball.noiseMod();
+		}
 }
 
 function windowResized()
@@ -153,8 +162,12 @@ class Ball
 		this.yspeedbool = 0;
 		this.r = 75;
 		this.isMuted = new Boolean(false);
+
 		this.fadeR, this.fadeB = 255;
 		this.fadeG = 255;
+
+		this.xOff = 0.01;
+		this.xIncrement = 0.01;
 		this.reset();
 	}
 
@@ -208,8 +221,35 @@ class Ball
 
 	show()
 	{
+		if(score >= 70)
+		{
+			stroke(255);
+
+			if (score >= 80)
+			{
+				strokeWeight(1);
+
+				if(score >= 90)
+				{
+					strokeWeight(0.1);
+					if(score >= 100)
+					{
+						noStroke();
+					}
+				}
+			}
+		}
 		fill(this.fadeR, this.fadeG, this.fadeB);
 		ellipse(this.x, this.y, this.r * 2);
+	}
+
+	noiseMod()
+	{
+		this.n = noise(this.xOff) * 100;
+
+		this.r = this.n;
+
+		this.xOff += this.xIncrement;
 	}
 
 	clicked()
@@ -258,12 +298,12 @@ class Ball
 				score = score + 1;
 				if(score => 0)
 				{
-					if(score > 5)
+					if(score >= 10)
 					{
 						this.xspeed = this.xspeed * 1.05;
 						this.yspeed = this.yspeed * 1.05;
-						this.r = random(50, 75);
-						if(score > 10)
+						this.r = random(70, 80);
+						if(score >= 20)
 						{
 							this.xspeed = this.xspeed * 1.05;
 							this.yspeed = this.yspeed * 1.05;
@@ -271,12 +311,12 @@ class Ball
 							this.fadeR = random(100, 150);
 							this.fadeB = random(100, 150);
 							this.fadeG = random(100, 150);
-								if(score > 15)
+								if(score >= 30)
 								{
 									this.xspeed = this.xspeed * 1.05;
 									this.yspeed = this.yspeed * 1.05;
-									 this.r = random(25, 50);
-									if(score > 20)
+									 this.r = random(60, 70);
+									if(score >= 40)
 									{
 										this.xspeed = this.xspeed * 1.05;
 										this.yspeed = this.yspeed * 1.05;
@@ -284,20 +324,63 @@ class Ball
 										this.fadeR = random(50, 100);
 										this.fadeB = random(50, 100);
 										this.fadeG = random(50, 100);
-											if(score > 25)
+											if(score >= 50)
 											{
 												this.xspeed = this.xspeed * 1.05;
 												this.yspeed = this.yspeed * 1.05;
 
-												this.r = 10;
-												if(score > 30)
+												this.fadeR = random(10, 25);
+												this.fadeB = random(10, 25);
+												this.fadeG = random(10, 25);
+
+												this.r = random(40, 50);
+												if(score >= 60)
 												{
 													this.xspeed = this.xspeed * 1.05;
 													this.yspeed = this.yspeed * 1.05;
-													
-													this.fadeR = random(5, 15);
-													this.fadeB = random(5, 15);
-													this.fadeG = random(5, 15);
+
+														if(score >= 70)
+														{
+															this.xspeed = this.xspeed * 1.05;
+															this.yspeed = this.yspeed * 1.05;
+
+															this.fadeR = random(50, 100);
+															this.fadeB = random(50, 100);
+															this.fadeG = random(50, 100);
+
+															if(score >= 80)
+															{
+																this.fadeR = random(5, 15);
+																this.fadeB = random(5, 15);
+																this.fadeG = random(5, 15);
+
+																if(score >= 90)
+																{
+																	this.fadeR = random(1, 10);
+																	this.fadeB = random(1, 10);
+																	this.fadeG = random(1, 10);
+
+																	if(score >= 100)
+																	{
+																		this.fadeR = 7;
+																		this.fadeB = 7;
+																		this.fadeG = 7;
+																		if(score >= 110)
+																		{
+																			this.fadeR = 5;
+																			this.fadeB = 5;
+																			this.fadeG = 5;
+																			if(score >= 120)
+																			{
+																				this.fadeR = 3;
+																				this.fadeB = 3;
+																				this.fadeG = 3;
+																			}
+																		}
+																	}
+																}
+															}
+														}
 												}
 											}
 									}
@@ -308,7 +391,6 @@ class Ball
 			}
 			else if(mouseX > width - 100 && mouseY > height - 100)
 			{
-				console.log("yes correct");
 				if(this.isMuted == false)
 				{
 					theme.setVolume(0);
@@ -338,7 +420,7 @@ class Ball
 				if(miss == 0)
 				{
 					//this is a redirect to a page
-					window.location.replace("menu.html");
+					window.location.replace("gameOver.html");
 					background(0);
 				}
 			}
