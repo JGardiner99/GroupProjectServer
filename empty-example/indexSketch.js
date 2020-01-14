@@ -6,6 +6,11 @@ var volumeButtonUnmute;
 var volumeButtonMute;
 var showImage;
 
+let stars = [];
+let speed;
+
+let myPart;
+
 var score = 0;
 var timeElapsed = 0;
 var miss = 15;
@@ -16,12 +21,15 @@ var minutes = Math.floor(timer / inter);
 var seconds = timer % inter;
 
 var mode = localStorage.getItem("modeValue");
-
 function preload()
 {
-	theme = loadSound("./Assets/Sounds/thememain.wav");
+	theme = loadSound("./Assets/Sounds/thememain.ogg");
+	gameFont = loadFont("./PressStart2P-Regular.ttf");
 	success = loadSound("./Assets/Sounds/clicksuccess.wav");
 	fail = loadSound("./Assets/Sounds/clickfail.wav");
+	volumeImage = loadImage("./Assets/Images/volumeButton1.png");
+
+	star = new Star();
 }
 
 function setup()
@@ -59,10 +67,10 @@ function draw()
 	speed = map(timeElapsed * 50, 0, width, 2, 20);
 
 	for(let i = 0; i < stars.length; i++)
-	{
-		stars[i].update();
-		stars[i].show();
-	}
+  {
+    stars[i].update();
+    stars[i].show();
+  }
 
 	translate(-width/2, -height/2);
 
@@ -117,7 +125,33 @@ function windowResized()
 
 function mousePressed()
 {
+	clicked();
 	ball.clicked();
+}
+
+function clicked()
+{
+	if(mouseX > width - 100 && mouseY > height - 100)
+	{
+		if(this.isMuted == false)
+		{
+			theme.setVolume(0);
+			fail.setVolume(0);
+			success.setVolume(0);
+			this.isMuted = true;
+			volumeImage = loadImage("./Images/volumeButton1.png");
+			console.log(this.isMuted);
+		}
+		else
+		{
+			theme.setVolume(0.15);
+			fail.setVolume(0.75);
+			success.setVolume(0.5);
+			this.isMuted = false;
+			volumeImage = loadImage("./Images/volumeButton2.png");
+			console.log(this.isMuted);
+		}
+	}
 }
 
 //ball class
@@ -358,27 +392,6 @@ class Ball
 								}
 						}
 					}
-				}
-			}
-			else if(mouseX > width - 100 && mouseY > height - 100)
-			{
-				if(this.isMuted == false)
-				{
-					theme.setVolume(0);
-					fail.setVolume(0);
-					success.setVolume(0);
-					this.isMuted = true;
-					volumeImage = loadImage("./Images/volumeButton1.png");
-					console.log(this.isMuted);
-				}
-				else
-				{
-					theme.setVolume(0.15);
-					fail.setVolume(0.75);
-					success.setVolume(0.5);
-					this.isMuted = false;
-					volumeImage = loadImage("./Images/volumeButton2.png");
-					console.log(this.isMuted);
 				}
 			}
 			else

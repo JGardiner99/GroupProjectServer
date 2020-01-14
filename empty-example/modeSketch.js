@@ -1,5 +1,23 @@
-var widthAmount;
+let font;
+
+let stars = [];
+let speed = 2;
+
+var menuTheme;
+var volumeButton;
+var muteButton;
+
 var mode;
+var volumeControl = localStorage.getItem("volumeValue");
+var isMuted = new Boolean(volumeControl);
+function preload()
+{
+  menuTheme = loadSound("./Assets/Sounds/theme 1.wav");
+  Unmute = loadImage("./Assets/Images/VolumeButton1.png");
+  Mute = loadImage("./Assets/Images/VolumeButton2.png");
+  star = new Star();
+}
+
 function setup()
 {
   createCanvas(windowWidth, windowHeight);
@@ -16,23 +34,28 @@ function setup()
 
   tutorialButton = createButton("Medium");
   tutorialButton.position(0, height/1.57);
-  tutorialButton.mousePressed(tutorial);
+  tutorialButton.mousePressed(launchGame);
 
   creditsButton = createButton("Hard");
   creditsButton.position(0, height/1.4);
-  creditsButton.mousePressed(credits);
+  creditsButton.mousePressed(launchGame);
+
+  console.log(volumeControl);
 }
 
 function draw()
 {
 	background(0);
-  fill(255);
-  rect(width/2, 0, width / 2, height);
 }
 
 function windowResized()
 {
 	resizeCanvas(windowWidth, windowHeight);
+}
+
+function launchGame()
+{
+	playButton.html(window.location.href = "index.html");
 }
 
 function mousePressed()
