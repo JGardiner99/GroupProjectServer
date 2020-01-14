@@ -25,19 +25,19 @@ function setup()
 
   font = loadFont("./Assets/PressStart2P-Regular.ttf");
   textFont(font);
-  textSize(width / 9);
+  textSize(width / 7);
   textAlign(CENTER, CENTER);
 
   playButton = createButton("Easy");
-  playButton.position(0, height/ 1.8);
+  playButton.position(0, height/ 2.35);
   playButton.mousePressed(launchGame);
 
   tutorialButton = createButton("Medium");
-  tutorialButton.position(0, height/1.57);
+  tutorialButton.position(0, height/2);
   tutorialButton.mousePressed(launchGame);
 
   creditsButton = createButton("Hard");
-  creditsButton.position(0, height/1.4);
+  creditsButton.position(0, height/1.75);
   creditsButton.mousePressed(launchGame);
 
   console.log(volumeControl);
