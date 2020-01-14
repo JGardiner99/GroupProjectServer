@@ -23,8 +23,7 @@ function preload()
 	gameFont = loadFont("PressStart2P-Regular.ttf");
 	success = loadSound("./Sounds/click success.wav");
 	fail = loadSound("./Sounds/click fail.wav");
-	img1 = loadImage("./Images/volumeButton1.png");
-	img2 = loadImage("./Images/volumeButton2.png");
+	volumeImage = loadImage("./Images/volumeButton1.png");
 }
 
 function setup()
@@ -71,8 +70,8 @@ function setup()
 	{
 	stars[i] = new Star();
 	}
-	img1.resize(100, 100);
-	img2.resize(100, 100);
+	volumeImage.resize(100, 100);
+
 	ball = new Ball();
 }
 
@@ -127,22 +126,8 @@ function draw()
 			text("Time Remaining: " + minutes + ":0" + seconds, -405, 30);
 		}
 			noStroke();
+		image(volumeImage, width - 100, height - 100);
 
-		image(volumeButtonMute, width, height);
-}
-
-function imageUnmute()
-{
-	if(isMuted = false)
-	showImage = img1;
-}
-
-function imageMute()
-{
-	if(isMuted = true)
-	{
-		showImage = img2;
-	}
 }
 
 function windowResized()
@@ -166,8 +151,13 @@ class Ball
 		this.yspeed = 0;
 		this.xspeedbool = 0;
 		this.yspeedbool = 0;
-		this.r = 50
+		this.r;
 		this.isMuted = new Boolean(false);
+		this.fadeR, this.fadeB = 255;
+		this.fadeG = 255;
+		this.xoff = 0.0;
+		this.xincrement = 0.01;
+		this.n = noise(this.xoff) * 50;
 		this.reset();
 	}
 
@@ -221,7 +211,7 @@ class Ball
 
 	show()
 	{
-		fill(255);
+		fill(this.fadeR, this.fadeG, this.fadeB);
 		ellipse(this.x, this.y, this.r * 2);
 	}
 
@@ -238,6 +228,10 @@ class Ball
 			{
 				success.play();
 				//this gives xspeed a random value 1 or 2
+				this.fadeR = random(200, 255);
+				this.fadeB = random(200, 255);
+				this.fadeG = random(200, 255);
+
 				this.xspeedbool = Math.floor(Math.random() * 2) + 1;
 				if(this.xspeedbool == 1)
 				{
@@ -265,14 +259,47 @@ class Ball
 				}
 				//this gets the score then adds one to it every time the ball is clicked
 				score = score + 1;
-
-				if(score > 2)
+				if(score => 0)
 				{
-					this.r = random(25, 75);
-					if(score > 4)
+					this.r = 50;
+					if(score > 5)
 					{
-						this.xspeed = this.xspeed * 1.5;
-						this.yspeed = this.yspeed * 1.5;
+						this.r = random(25, 75);
+						if(score > 10)
+						{
+							this.xspeed = this.xspeed * 1.2;
+							this.yspeed = this.yspeed * 1.2;
+							this.fadeR = random(100, 150);
+							this.fadeB = random(100, 150);
+							this.fadeG = random(100, 150);
+								if(score > 15)
+								{
+									 this.xspeed = this.xspeed * 1.2;
+									 this.yspeed = this.yspeed * 1.2;
+									 this.r = random(25, 75);
+									if(score > 20)
+									{
+										this.fadeR = random(50, 100);
+										this.fadeB = random(50, 100);
+										this.fadeG = random(50, 100);
+											if(score > 25)
+											{
+												this.r = 50;
+												sineWave()
+												{
+													this.r = this.n;
+													this.xoff += this.xincrement;
+												}
+												if(score > 30)
+												{
+													this.fadeR = random(5, 15);
+													this.fadeB = random(5, 15);
+													this.fadeG = random(5, 15);
+												}
+											}
+									}
+								}
+						}
 					}
 				}
 			}
@@ -285,6 +312,7 @@ class Ball
 					fail.setVolume(0);
 					success.setVolume(0);
 					this.isMuted = true;
+					volumeImage = loadImage("./Images/volumeButton1.png");
 					console.log(this.isMuted);
 				}
 				else
@@ -293,6 +321,7 @@ class Ball
 					fail.setVolume(0.75);
 					success.setVolume(0.5);
 					this.isMuted = false;
+					volumeImage = loadImage("./Images/volumeButton2.png");
 					console.log(this.isMuted);
 				}
 			}
@@ -311,6 +340,8 @@ class Ball
 				}
 			}
 		}
+
+
 	}
 }
 //https://codepen.io/rndm/pen/ozZzry
