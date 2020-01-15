@@ -33,13 +33,13 @@ function setup()
 		stars[i] = new Star();
 	}
 
-  font = loadFont("./Assets/PressStart2P-Regular.ttf");
+  font = loadFont("./PressStart2P-Regular.ttf");
   textFont(font);
-  textSize(width / 12);
+  textSize(width / 15);
   textAlign(CENTER, CENTER);
 
   playButton = createButton("Easy");
-  playButton.position(0, height/ 2.35);
+  playButton.position(0, height/ 2.2);
   playButton.mousePressed(launchGame);
 
   tutorialButton = createButton("Medium");
@@ -47,7 +47,7 @@ function setup()
   tutorialButton.mousePressed(launchGame);
 
   creditsButton = createButton("Hard");
-  creditsButton.position(0, height/1.75);
+  creditsButton.position(0, height/1.8);
   creditsButton.mousePressed(launchGame);
 }
 
