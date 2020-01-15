@@ -6,26 +6,36 @@ let speed = 2;
 var menuTheme;
 var volumeButton;
 var muteButton;
-
-var mode;
 var volumeControl = localStorage.getItem("volumeValue");
 var isMuted = new Boolean(volumeControl);
+
+var mode;
+
 function preload()
 {
   menuTheme = loadSound("./Assets/Sounds/theme 1.wav");
   Unmute = loadImage("./Assets/Images/VolumeButton1.png");
   Mute = loadImage("./Assets/Images/VolumeButton2.png");
+
   star = new Star();
 }
 
 function setup()
 {
-  createCanvas(windowWidth, windowHeight);
 	document.body.style.overflow = 'hidden';
+  createCanvas(windowWidth, windowHeight);
+
+  menuTheme.setVolume(0.1);
+	menuTheme.loop();
+
+  for(let i = 0; i < 600; i += 1)
+	{
+		stars[i] = new Star();
+	}
 
   font = loadFont("./Assets/PressStart2P-Regular.ttf");
   textFont(font);
-  textSize(width / 7);
+  textSize(width / 12);
   textAlign(CENTER, CENTER);
 
   playButton = createButton("Easy");
@@ -39,13 +49,26 @@ function setup()
   creditsButton = createButton("Hard");
   creditsButton.position(0, height/1.75);
   creditsButton.mousePressed(launchGame);
-
-  console.log(volumeControl);
 }
 
 function draw()
 {
 	background(0);
+  translate(width / 2, height / 2);
+
+	for(let i = 0; i < stars.length; i += 1)
+	{
+		stars[i].show();
+		stars[i].update();
+	}
+  strokeWeight(height/90);
+  stroke('#C32020');
+  fill('#6B84E8');
+  textFont(font);
+  text('Difficulty', 0, -height/8);
+  translate(-width/2, -height/2);
+  image(Mute, width - 125, height - 125);
+  Mute.resize(150, 150);
 }
 
 function windowResized()
@@ -58,18 +81,25 @@ function launchGame()
 	playButton.html(window.location.href = "index.html");
 }
 
-function mousePressed()
+function clicked()
 {
-  if(mouseX > width / 2)
-    {
-        mode = 1;
-        localStorage.setItem("modeValue", mode);
-        window.location.href = "index.html";
-      }
-      else
-      {
-        mode = 2;
-        localStorage.setItem("modeValue", mode);
-        window.location.href = "index.html";
-      }
+	if(mouseX > width - 125 && mouseY > height - 125)
+		{
+			if(this.isMuted == false)
+			{
+				menuTheme.setVolume(0);
+				this.isMuted = true;
+				console.log(this.isMuted);
+        localStorage.setItem("volumeValue", this.isMuted);
+				Mute = loadImage ("./Assets/Images/VolumeButton2.png");
+			}
+			else
+			{
+				menuTheme.setVolume(0.1);
+				this.isMuted = false;
+				console.log(this.isMuted);
+        localStorage.setItem("volumeValue", this.isMuted);
+				Mute = loadImage ("./Assets/Images/VolumeButton1.png");
+			}
+		}
 }

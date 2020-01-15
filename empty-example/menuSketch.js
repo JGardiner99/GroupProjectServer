@@ -13,44 +13,18 @@ function preload()
 	menuTheme = loadSound("./Assets/Sounds/theme 1.wav");
 	Unmute = loadImage ("./Assets/Images/VolumeButton2.png");
 	Mute = loadImage ("./Assets/Images/VolumeButton1.png");
+
+	star = new Star();
 }
 
 
 function setup()
 {
-    document.body.style.overflow = 'hidden';
-    createCanvas(windowWidth, windowHeight);
+  document.body.style.overflow = 'hidden';
+  createCanvas(windowWidth, windowHeight);
 
 	menuTheme.setVolume(0.1);
 	menuTheme.loop();
-
-	function Star()
-	{
-		this.x = random(-width, width);
-		this.y = random(-height, height);
-		this.z = random(width);
-
-		this.display = function()
-		{
-			noStroke();
-			fill(255);
-			let sx = map(this.x / this.z, 0, 1, 0, width/2);
-			let sy = map(this.y / this.z, 0, 1, 0, height);
-			let r = map(this.z, 0, width, 12, 0);
-			ellipse(sx, sy, r, r);
-		} // display
-
-		this.update = function()
-		{
-			this.z -= speed;
-
-			if(this.z < 1) {
-				this.z = width;
-				this.x = random(-width, width);
-				this.y = random(-height, height);
-			}
-		} // update
-	} // Star
 
 	for(let i = 0; i < 600; i += 1)
 	{
@@ -86,7 +60,7 @@ function draw()
 
 	for(let i = 0; i < stars.length; i += 1)
 	{
-		stars[i].display();
+		stars[i].show();
 		stars[i].update();
 	}
 
@@ -103,6 +77,7 @@ function windowResized()
 {
 	resizeCanvas(windowWidth, windowHeight);
 }
+
 function mousePressed()
 {
 	clicked();
@@ -112,16 +87,19 @@ function launchGame()
 {
 	playButton.html(window.location.href = "Mode.html");
 }
+
 function tutorial()
 {
 	tutorialButton.html(window.location.href = "tutorial.html");
 }
+
 function credits()
 {
 	creditsButton.html(window.location.href = "credits.html");
 }
 
-function clicked(){
+function clicked()
+{
 	if(mouseX > width - 125 && mouseY > height - 125)
 		{
 			if(this.isMuted == false)
