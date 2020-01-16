@@ -4,16 +4,17 @@ let stars = [];
 let speed = 2;
 
 var menuTheme;
+
 var volumeButton;
 var muteButton;
-var volumeControl = 0;
+var volumeControl;
 
 function preload()
 {
 	menuTheme = loadSound("./Assets/Sounds/theme 1.mp3");
 	Unmute = loadImage ("./Assets/Images/VolumeButton2.png");
 	Mute = loadImage ("./Assets/Images/VolumeButton1.png");
-
+  font = loadFont('PressStart2P-Regular.ttf');
 	star = new Star();
 }
 
@@ -25,7 +26,9 @@ function setup()
 	menuTheme.setVolume(0.1);
 	menuTheme.loop();
 
-	for(let i = 0; i < 600; i += 1)
+	let starsAmount = width / 2;
+
+	for(let i = 0; i < starsAmount; i += 1)
 	{
 		stars[i] = new Star();
 	}
@@ -33,7 +36,6 @@ function setup()
 	createCanvas(windowWidth, windowHeight);
 	document.body.style.overflow = 'hidden';
 
-  font = loadFont('PressStart2P-Regular.ttf');
 	textFont(font);
 	textSize(width / 12);
 	textAlign(CENTER, CENTER);
@@ -101,19 +103,22 @@ function clicked()
 {
 	if(mouseX > width - 125 && mouseY > height - 125)
 		{
-			if(sessionStorage.getItem("volumeControl") == 0)
-			{
-				theme.setVolume(0);
-				sessionStorage.setItem("volumeControl", 1);
-				Mute = loadImage ("./Assets/Images/VolumeButton2.png");
-			}
-			else
-			{
-				theme.setVolume(0.1);
-				sessionStorage.setItem("volumeControl", 0);
-				Mute = loadImage ("./Assets/Images/VolumeButton1.png");
-			}
-		}
+			if(mouseX > width - 125 && mouseY > height - 125)
+				{
+					if(sessionStorage.getItem("volumeControl") == 0)
+					{
+						menuTheme.setVolume(0);
+						sessionStorage.setItem("volumeControl", 1);
+						Mute = loadImage ("./Assets/Images/VolumeButton2.png");
+					}
+					else
+					{
+						menuTheme.setVolume(0.1);
+						sessionStorage.setItem("volumeControl", 0);
+						Mute = loadImage ("./Assets/Images/VolumeButton1.png");
+					}
+				}
 
 			console.log(sessionStorage.getItem("volumeControl"));
+		}
 }

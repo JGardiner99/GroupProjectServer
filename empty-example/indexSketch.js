@@ -7,9 +7,7 @@ var volumeButtonMute;
 var showImage;
 
 let stars = [];
-let speed;
-
-let myPart;
+let speed = 2;
 
 var score = 0;
 var timeElapsed = 0;
@@ -56,13 +54,12 @@ function setup()
 	document.body.style.overflow = 'hidden';
 	createCanvas(windowWidth, windowHeight);
 let timer;
-	let starsAmount = width / 2;
-	let speed = 30;
 
-	for(let i = 0; i < starsAmount; i++)
+	let starsAmount = width / 2;
+
+	for(let i = 0; i < starsAmount; i += 1)
 	{
 		stars[i] = new Star();
-		stars[i].speed = speed;
 	}
 
 	theme.loop();
@@ -101,6 +98,7 @@ function draw()
 
 	if(timer == 0)
 	{
+		sessionStorage.setItem("scoreTotal", score);
 		window.location.replace("gameOver.html");
 	}
 
@@ -671,8 +669,8 @@ class Ball
 				if(miss == 0)
 				{
 					//this is a redirect to a page
+					sessionStorage.setItem("scoreTotal", score);
 					window.location.replace("gameOver.html");
-					background(0);
 				}
 			}
 		}

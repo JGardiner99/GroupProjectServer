@@ -4,8 +4,6 @@ let stars = [];
 let speed = 2;
 
 var menuTheme;
-var volumeButton;
-var muteButton;
 
 var easyClicked = false;
 var midClicked = false;
@@ -27,7 +25,9 @@ function setup()
 	document.body.style.overflow = 'hidden';
   createCanvas(windowWidth, windowHeight);
 
-  for(let i = 0; i < 600; i += 1)
+  let starsAmount = width / 2;
+
+	for(let i = 0; i < starsAmount; i += 1)
 	{
 		stars[i] = new Star();
 	}
@@ -80,6 +80,7 @@ function draw()
   textFont(font);
   text('Difficulty', 0, -height/8);
   translate(-width/2, -height/2);
+  
   image(Mute, width - 125, height - 125);
   Mute.resize(150, 150);
 }
@@ -162,6 +163,5 @@ function clicked()
 				Mute = loadImage ("./Assets/Images/VolumeButton1.png");
 			}
 		}
-
-			console.log(localStorage.getItem("volumeControl"));
+			console.log(sessionStorage.getItem("volumeControl"));
 }
