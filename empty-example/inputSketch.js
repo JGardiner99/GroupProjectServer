@@ -23,11 +23,7 @@ function setup()
 {
   document.body.style.overflow = 'hidden';
   createCanvas(windowWidth, windowHeight);
-	sessionStorage.setItem("volumeControl", 0)
-	console.log(score);
-	console.log(mode);
-	console.log("Vol " + sessionStorage.getItem("volumeControl"));
-
+	
 	menuTheme.loop();
 	if(sessionStorage.getItem("volumeControl") == 0)
 	{

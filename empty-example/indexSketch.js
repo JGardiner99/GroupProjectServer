@@ -1,3 +1,4 @@
+//createing variabls
 var theme;
 var gameFont;
 var success;
@@ -13,9 +14,11 @@ var score = 0;
 var timeElapsed = 0;
 var miss = 15;
 
+//gets the stored session data and stores to variable
 var mode = sessionStorage.getItem("Difficulty");
 
 let timer;
+//checks to see what variables should be used.
 if(mode == 1)
 {
 	miss = 20;
@@ -32,6 +35,7 @@ else
 	timer = 60;
 }
 
+//variables used for the timer
 var inter = 60;
 var minutes = Math.floor(timer / inter);
 var seconds = timer % inter;
@@ -40,6 +44,7 @@ var seconds = timer % inter;
 
 function preload()
 {
+	  	//setting file paths to variables
 	theme = loadSound("./Assets/Sounds/thememain.mp3");
 	gameFont = loadFont("./PressStart2P-Regular.ttf");
 	success = loadSound("./Assets/Sounds/clicksuccess.mp3");
@@ -51,18 +56,23 @@ function preload()
 
 function setup()
 {
+	  	//hides the scroll bar
 	document.body.style.overflow = 'hidden';
 	createCanvas(windowWidth, windowHeight);
-let timer;
+
+	let timer;
 
 	let starsAmount = width / 2;
 
+	//calculation for the amount of stars for screen
 	for(let i = 0; i < starsAmount; i += 1)
 	{
 		stars[i] = new Star();
 	}
-
+  	//call the audio track needed then looping it
 	theme.loop();
+	//checks to see the value in the sessionStorage if its equal to 0 then have the audio play
+	//else mute audio and switch icon
 	if(sessionStorage.getItem("volumeControl") == 0)
 	{
 		theme.setVolume(0.1);
@@ -88,6 +98,7 @@ function draw()
 	translate(width/2, height/2);
 	speed = map(timeElapsed * 50, 0, width, 2, 20);
 
+	//used to draw each star on the screen. stars.length is the amount of stars that will be displayed.
 	for(let i = 0; i < stars.length; i++)
   {
     stars[i].update();
@@ -96,12 +107,14 @@ function draw()
 
 	translate(-width/2, -height/2);
 
+	//if the value given to timer gets to 0 then run code
 	if(timer == 0)
 	{
 		sessionStorage.setItem("scoreTotal", score);
 		window.location.replace("gameOver.html");
 	}
 
+	//gets three functinos from the Ball class
 	ball.update();
 	ball.edges();
 	ball.show();
@@ -110,9 +123,11 @@ function draw()
 		textSize(20);
 		stroke(0);
 		strokeWeight(4);
+		//display text
 		text("Score: " + score, 10, 30);
 		text("Misses Left: " + miss, 10, 60);
 
+		//used to choose what message to display (used to make things tidy)
 		if (seconds > 9)
 		{
 			text("Time Remaining: " + minutes + ":" + seconds, width -405, 30);
@@ -122,16 +137,18 @@ function draw()
 			text("Time Remaining: " + minutes + ":0" + seconds, width -405, 30);
 		}
 
-
+			//used to calculate time. every 60 frames = 1 second
 			if(frameCount % 60 == 0 && timer > 0)
 			{
 				timer--;
 				minutes = Math.floor(timer / inter);
 				seconds = timer % inter;
 
+				//used later to calculate speed of stars
 				timeElapsed += 1;
 			}
 			noStroke();
+
 		image(Mute, width - 125, height - 125);
 		Mute.resize(150, 150);
 
@@ -171,6 +188,7 @@ function mousePressed()
 
 function clicked()
 {
+	  	//if the mouse is inside the chosen area then run the code (same as above)
 	if(mouseX > width - 125 && mouseY > height - 125)
 		{
 			if(sessionStorage.getItem("volumeControl") == 0)
@@ -200,28 +218,36 @@ class Ball
 {
 	constructor()
 	{
+		//start position x and y
 		this.x = width/2;
 		this.y = height/2;
+		//speed of movement x and y
 		this.xspeed = 0;
 		this.yspeed = 0;
 		this.xspeedbool = 0;
 		this.yspeedbool = 0;
+
+		//ball radius
 		this.r = 75;
 
+		//red green and blue colours
 		this.fadeR, this.fadeB = 255;
 		this.fadeG = 255;
 
+		//used for the noise function
 		this.xOff = 0.01;
 		this.xIncrement = 0.01;
 		this.reset();
 	}
 
+	//used to update the balls x and y position
 	update()
 	{
 		this.x += this.xspeed;
 		this.y += this.yspeed;
 	}
 
+	//resets the ball if needed
 	reset()
 	{
 		this.x = width/2;
@@ -236,10 +262,13 @@ class Ball
 		}
 	}
 
+	//If the ball hits the side of the canvas then it will bounce off
 	edges()
 	{
+		//if center of ball hits defined values then run code
 		if (this.y < 15 || this.y < 14 || this.y > height)
 		{
+			//mulitply value by -1
 			this.yspeed *= -1;
 		}
 
@@ -264,6 +293,7 @@ class Ball
 		}
 	}
 
+	//draws ball and adds effects to it
 	show()
 	{
 		if(mode == 1)
@@ -334,6 +364,7 @@ class Ball
 		ellipse(this.x, this.y, this.r * 2);
 	}
 
+	//adds noice to the ball to create random size;
 	noiseMod()
 	{
 		this.n = noise(this.xOff) * 100;

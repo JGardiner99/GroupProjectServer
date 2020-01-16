@@ -1,3 +1,4 @@
+//createing variabls
 let font;
 
 let stars = [];
@@ -13,26 +14,32 @@ var mode;
 
 function preload()
 {
+  	//setting file paths to variables
   menuTheme = loadSound("./Assets/Sounds/theme 1.mp3");
   Unmute = loadImage("./Assets/Images/VolumeButton1.png");
   Mute = loadImage("./Assets/Images/VolumeButton2.png");
+  font = loadFont("./PressStart2P-Regular.ttf");
 
   star = new Star();
 }
 
 function setup()
 {
+  	//hides the scroll bar
 	document.body.style.overflow = 'hidden';
   createCanvas(windowWidth, windowHeight);
 
   let starsAmount = width / 2;
 
+	//calculation for the amount of stars for screen
 	for(let i = 0; i < starsAmount; i += 1)
 	{
 		stars[i] = new Star();
 	}
-
+  	//call the audio track needed then looping it
     menuTheme.loop();
+    //checks to see the value in the sessionStorage if its equal to 0 then have the audio play
+    //else mute audio and switch icon
     if(sessionStorage.getItem("volumeControl") == 0)
     {
       menuTheme.setVolume(0.1);
@@ -44,8 +51,6 @@ function setup()
       Mute = loadImage ("./Assets/Images/VolumeButton2.png");
     }
 
-
-  font = loadFont("./PressStart2P-Regular.ttf");
   textFont(font);
   textSize(width / 15);
   textAlign(CENTER, CENTER);
@@ -68,7 +73,7 @@ function draw()
 {
 	background(0);
   translate(width / 2, height / 2);
-
+	//used to draw each star on the screen. stars.length is the amount of stars that will be displayed.
 	for(let i = 0; i < stars.length; i += 1)
 	{
 		stars[i].show();
@@ -80,7 +85,7 @@ function draw()
   textFont(font);
   text('Difficulty', 0, -height/8);
   translate(-width/2, -height/2);
-  
+
   image(Mute, width - 125, height - 125);
   Mute.resize(150, 150);
 }
@@ -91,6 +96,7 @@ function easyButtonClicked()
     midClicked = false;
     hardClicked = false;
 
+    //checks the bool to see if its true, if it is then it runs the code
     if(easyClicked == true)
     {
       sessionStorage.setItem("Difficulty", 1);
@@ -148,11 +154,13 @@ function windowResized()
 
 function clicked()
 {
+  	//if the mouse is inside the chosen area then run the code (same as above)
 	if(mouseX > width - 125 && mouseY > height - 125)
 		{
 			if(sessionStorage.getItem("volumeControl") == 0)
 			{
 				menuTheme.setVolume(0);
+        //stores variable to the sessionStorage within the browser
 				sessionStorage.setItem("volumeControl", 1);
 				Mute = loadImage ("./Assets/Images/VolumeButton2.png");
 			}

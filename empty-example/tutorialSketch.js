@@ -10,10 +10,6 @@ var score = 0;
 var timeElapsed = 0;
 var miss = 10;
 
-let timer = 120;
-var inter = 60;
-var minutes = Math.floor(timer / inter);
-var seconds = timer % inter;
 
 var volumeButton;
 var muteButton;
