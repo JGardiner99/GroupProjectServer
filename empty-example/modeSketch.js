@@ -6,14 +6,16 @@ let speed = 2;
 var menuTheme;
 var volumeButton;
 var muteButton;
-var volumeControl = localStorage.getItem("volumeValue");
-var isMuted = new Boolean(volumeControl);
+
+var easyClicked = false;
+var midClicked = false;
+var hardClicked = false;
 
 var mode;
 
 function preload()
 {
-  menuTheme = loadSound("./Assets/Sounds/theme 1.wav");
+  menuTheme = loadSound("./Assets/Sounds/theme 1.mp3");
   Unmute = loadImage("./Assets/Images/VolumeButton1.png");
   Mute = loadImage("./Assets/Images/VolumeButton2.png");
 
@@ -25,30 +27,41 @@ function setup()
 	document.body.style.overflow = 'hidden';
   createCanvas(windowWidth, windowHeight);
 
-  menuTheme.setVolume(0.1);
-	menuTheme.loop();
-
   for(let i = 0; i < 600; i += 1)
 	{
 		stars[i] = new Star();
 	}
+
+    menuTheme.loop();
+    if(sessionStorage.getItem("volumeControl") == 0)
+    {
+      menuTheme.setVolume(0.1);
+      Mute = loadImage ("./Assets/Images/VolumeButton1.png");
+    }
+    else
+    {
+      menuTheme.setVolume(0);
+      Mute = loadImage ("./Assets/Images/VolumeButton2.png");
+    }
+
 
   font = loadFont("./PressStart2P-Regular.ttf");
   textFont(font);
   textSize(width / 15);
   textAlign(CENTER, CENTER);
 
-  playButton = createButton("Easy");
-  playButton.position(0, height/ 2.2);
-  playButton.mousePressed(launchGame);
+  easyButton = createButton("Easy");
+  easyButton.position(0, height/ 2);
+  easyButton.mousePressed(easyButtonClicked);
 
-  tutorialButton = createButton("Medium");
-  tutorialButton.position(0, height/2);
-  tutorialButton.mousePressed(launchGame);
+  midButton = createButton("Medium");
+  midButton.position(0, height/1.75);
+  midButton.mousePressed(midButtonClicked);
 
-  creditsButton = createButton("Hard");
-  creditsButton.position(0, height/1.8);
-  creditsButton.mousePressed(launchGame);
+  hardButton = createButton("Hard");
+  hardButton.position(0, height/1.55);
+  hardButton.mousePressed(hardButtonClicked);
+
 }
 
 function draw()
@@ -71,35 +84,84 @@ function draw()
   Mute.resize(150, 150);
 }
 
+function easyButtonClicked()
+{
+    easyClicked = true;
+    midClicked = false;
+    hardClicked = false;
+
+    if(easyClicked == true)
+    {
+      sessionStorage.setItem("Difficulty", 1);
+      easyButton.html(window.location.href = "index.html");
+    }
+    else
+    {
+      console.log("Error");
+    }
+}
+
+function midButtonClicked()
+{
+  easyClicked = false;
+  midClicked = true;
+  hardClicked = false;
+
+  if(midClicked == true)
+  {
+    sessionStorage.setItem("Difficulty", 2);
+    midButton.html(window.location.href = "index.html");
+  }
+  else
+  {
+      console.log("Error");
+  }
+}
+
+function hardButtonClicked()
+{
+  easyClicked = false;
+  midClicked = false;
+  hardClicked = true;
+
+  if(hardClicked == true)
+  {
+    sessionStorage.setItem("Difficulty", 3);
+    hardButton.html(window.location.href = "index.html");
+  }
+  else
+  {
+      console.log("Error");
+  }
+}
+
+function mousePressed()
+{
+  clicked();
+}
+
 function windowResized()
 {
 	resizeCanvas(windowWidth, windowHeight);
-}
-
-function launchGame()
-{
-	playButton.html(window.location.href = "index.html");
 }
 
 function clicked()
 {
 	if(mouseX > width - 125 && mouseY > height - 125)
 		{
-			if(this.isMuted == false)
+			if(sessionStorage.getItem("volumeControl") == 0)
 			{
 				menuTheme.setVolume(0);
-				this.isMuted = true;
-				console.log(this.isMuted);
-        localStorage.setItem("volumeValue", this.isMuted);
+				sessionStorage.setItem("volumeControl", 1);
 				Mute = loadImage ("./Assets/Images/VolumeButton2.png");
 			}
 			else
 			{
 				menuTheme.setVolume(0.1);
-				this.isMuted = false;
-				console.log(this.isMuted);
-        localStorage.setItem("volumeValue", this.isMuted);
+				sessionStorage.setItem("volumeControl", 0);
 				Mute = loadImage ("./Assets/Images/VolumeButton1.png");
 			}
 		}
+
+			console.log(localStorage.getItem("volumeControl"));
 }

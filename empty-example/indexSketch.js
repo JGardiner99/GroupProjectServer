@@ -15,18 +15,37 @@ var score = 0;
 var timeElapsed = 0;
 var miss = 15;
 
-let timer = 120;
+var mode = sessionStorage.getItem("Difficulty");
+
+let timer;
+if(mode == 1)
+{
+	miss = 20;
+	timer = 120;
+}
+else if(mode == 2)
+{
+	miss = 15;
+	timer = 90;
+}
+else
+{
+	miss = 10;
+	timer = 60;
+}
+
 var inter = 60;
 var minutes = Math.floor(timer / inter);
 var seconds = timer % inter;
 
-var mode = localStorage.getItem("modeValue");
+
+
 function preload()
 {
-	theme = loadSound("./Assets/Sounds/thememain.ogg");
+	theme = loadSound("./Assets/Sounds/thememain.mp3");
 	gameFont = loadFont("./PressStart2P-Regular.ttf");
-	success = loadSound("./Assets/Sounds/clicksuccess.wav");
-	fail = loadSound("./Assets/Sounds/clickfail.wav");
+	success = loadSound("./Assets/Sounds/clicksuccess.mp3");
+	fail = loadSound("./Assets/Sounds/clickfail.mp3");
 	volumeImage = loadImage("./Assets/Images/volumeButton1.png");
 
 	star = new Star();
@@ -36,7 +55,7 @@ function setup()
 {
 	document.body.style.overflow = 'hidden';
 	createCanvas(windowWidth, windowHeight);
-
+let timer;
 	let starsAmount = width / 2;
 	let speed = 30;
 
@@ -46,16 +65,22 @@ function setup()
 		stars[i].speed = speed;
 	}
 
-	theme.setVolume(0.15);
-	success.setVolume(0.5);
-	fail.setVolume(0.75);
 	theme.loop();
-
-	volumeImage.resize(100, 100);
-
+	if(sessionStorage.getItem("volumeControl") == 0)
+	{
+		theme.setVolume(0.1);
+		success.setVolume(0.5);
+		fail.setVolume(0.75);
+		Mute = loadImage ("./Assets/Images/VolumeButton1.png");
+	}
+	else
+	{
+		theme.setVolume(0);
+		success.setVolume(0);
+		fail.setVolume(0);
+		Mute = loadImage ("./Assets/Images/VolumeButton2.png");
+	}
 	ball = new Ball();
-
-	console.log("mode type: " + mode);
 }
 
 function draw()
@@ -73,7 +98,6 @@ function draw()
   }
 
 	translate(-width/2, -height/2);
-
 
 	if(timer == 0)
 	{
@@ -110,11 +134,29 @@ function draw()
 				timeElapsed += 1;
 			}
 			noStroke();
-		image(volumeImage, width - 100, height - 100);
+		image(Mute, width - 125, height - 125);
+		Mute.resize(150, 150);
 
-		if(score >= 60)
+		if(mode == 1)
 		{
-			ball.noiseMod();
+			if(score >= 90)
+			{
+				ball.noiseMod();
+			}
+		}
+		else if(mode == 2)
+		{
+				if(score >= 60)
+				{
+					ball.noiseMod();
+				}
+		}
+		else
+		{
+			if(score >= 35)
+			{
+				ball.noiseMod();
+			}
 		}
 }
 
@@ -131,28 +173,29 @@ function mousePressed()
 
 function clicked()
 {
-	if(mouseX > width - 100 && mouseY > height - 100)
-	{
-		if(this.isMuted == false)
+	if(mouseX > width - 125 && mouseY > height - 125)
 		{
-			theme.setVolume(0);
-			fail.setVolume(0);
-			success.setVolume(0);
-			this.isMuted = true;
-			volumeImage = loadImage("./Images/volumeButton1.png");
-			console.log(this.isMuted);
+			if(sessionStorage.getItem("volumeControl") == 0)
+			{
+				theme.setVolume(0);
+				success.setVolume(0);
+				fail.setVolume(0);
+				sessionStorage.setItem("volumeControl", 1);
+				Mute = loadImage ("./Assets/Images/VolumeButton2.png");
+			}
+			else
+			{
+				theme.setVolume(0.1);
+				success.setVolume(0.5);
+				fail.setVolume(0.75);
+				sessionStorage.setItem("volumeControl", 0);
+				Mute = loadImage ("./Assets/Images/VolumeButton1.png");
+			}
 		}
-		else
-		{
-			theme.setVolume(0.15);
-			fail.setVolume(0.75);
-			success.setVolume(0.5);
-			this.isMuted = false;
-			volumeImage = loadImage("./Images/volumeButton2.png");
-			console.log(this.isMuted);
-		}
-	}
+
+			console.log(sessionStorage.getItem("volumeControl"));
 }
+
 
 //ball class
 class Ball
@@ -166,7 +209,6 @@ class Ball
 		this.xspeedbool = 0;
 		this.yspeedbool = 0;
 		this.r = 75;
-		this.isMuted = new Boolean(false);
 
 		this.fadeR, this.fadeB = 255;
 		this.fadeG = 255;
@@ -226,24 +268,70 @@ class Ball
 
 	show()
 	{
-		if(score >= 70)
+		if(mode == 1)
 		{
-			stroke(255);
-
-			if (score >= 80)
+			if(score >= 105)
 			{
-				strokeWeight(1);
+				stroke(255);
 
-				if(score >= 90)
+				if (score >= 120)
 				{
-					strokeWeight(0.1);
-					if(score >= 100)
+					strokeWeight(1);
+
+					if(score >= 135)
 					{
-						noStroke();
+						strokeWeight(0.1);
+						if(score >= 150)
+						{
+							noStroke();
+						}
 					}
 				}
 			}
 		}
+		else if(mode == 2)
+		{
+			if(score >= 70)
+			{
+				stroke(255);
+
+				if (score >= 80)
+				{
+					strokeWeight(1);
+
+					if(score >= 90)
+					{
+						strokeWeight(0.1);
+						if(score >= 100)
+						{
+							noStroke();
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			if(score >= 35)
+			{
+				stroke(255);
+
+				if (score >= 40)
+				{
+					strokeWeight(1);
+
+					if(score >= 45)
+					{
+						strokeWeight(0.1);
+						if(score >= 50)
+						{
+							noStroke();
+						}
+					}
+				}
+			}
+		}
+
 		fill(this.fadeR, this.fadeG, this.fadeB);
 		ellipse(this.x, this.y, this.r * 2);
 	}
@@ -301,35 +389,31 @@ class Ball
 				}
 				//this gets the score then adds one to it every time the ball is clicked
 				score = score + 1;
+				if(mode == 1)
+				{
 				if(score => 0)
 				{
-					if(score >= 10)
+					if(score >= 15)
 					{
 						this.xspeed = this.xspeed * 1.05;
 						this.yspeed = this.yspeed * 1.05;
 						this.r = random(70, 80);
-						if(score >= 20)
+						if(score >= 30)
 						{
-							this.xspeed = this.xspeed * 1.05;
-							this.yspeed = this.yspeed * 1.05;
-
 							this.fadeR = random(100, 150);
 							this.fadeB = random(100, 150);
 							this.fadeG = random(100, 150);
-								if(score >= 30)
+								if(score >= 45)
 								{
 									this.xspeed = this.xspeed * 1.05;
 									this.yspeed = this.yspeed * 1.05;
 									 this.r = random(60, 70);
-									if(score >= 40)
+									if(score >= 60)
 									{
-										this.xspeed = this.xspeed * 1.05;
-										this.yspeed = this.yspeed * 1.05;
-
 										this.fadeR = random(50, 100);
 										this.fadeB = random(50, 100);
 										this.fadeG = random(50, 100);
-											if(score >= 50)
+											if(score >= 75)
 											{
 												this.xspeed = this.xspeed * 1.05;
 												this.yspeed = this.yspeed * 1.05;
@@ -339,12 +423,7 @@ class Ball
 												this.fadeG = random(10, 25);
 
 												this.r = random(40, 50);
-												if(score >= 60)
-												{
-													this.xspeed = this.xspeed * 1.05;
-													this.yspeed = this.yspeed * 1.05;
-
-														if(score >= 70)
+														if(score >= 105)
 														{
 															this.xspeed = this.xspeed * 1.05;
 															this.yspeed = this.yspeed * 1.05;
@@ -353,29 +432,35 @@ class Ball
 															this.fadeB = random(50, 100);
 															this.fadeG = random(50, 100);
 
-															if(score >= 80)
+															if(score >= 120)
 															{
 																this.fadeR = random(5, 15);
 																this.fadeB = random(5, 15);
 																this.fadeG = random(5, 15);
 
-																if(score >= 90)
+																if(score >= 135)
 																{
+																	this.xspeed = this.xspeed * 1.05;
+																	this.yspeed = this.yspeed * 1.05;
+
 																	this.fadeR = random(1, 10);
 																	this.fadeB = random(1, 10);
 																	this.fadeG = random(1, 10);
 
-																	if(score >= 100)
+																	if(score >= 150)
 																	{
 																		this.fadeR = 7;
 																		this.fadeB = 7;
 																		this.fadeG = 7;
 																		if(score >= 110)
 																		{
+																			this.xspeed = this.xspeed * 1.05;
+																			this.yspeed = this.yspeed * 1.05;
+
 																			this.fadeR = 5;
 																			this.fadeB = 5;
 																			this.fadeG = 5;
-																			if(score >= 120)
+																			if(score >= 165)
 																			{
 																				this.fadeR = 3;
 																				this.fadeB = 3;
@@ -393,6 +478,188 @@ class Ball
 						}
 					}
 				}
+				else if(mode == 2)
+				{
+					if(score => 0)
+					{
+						if(score >= 10)
+						{
+							this.xspeed = this.xspeed * 1.05;
+							this.yspeed = this.yspeed * 1.05;
+							this.r = random(70, 80);
+							if(score >= 20)
+							{
+								this.fadeR = random(100, 150);
+								this.fadeB = random(100, 150);
+								this.fadeG = random(100, 150);
+									if(score >= 30)
+									{
+										this.xspeed = this.xspeed * 1.05;
+										this.yspeed = this.yspeed * 1.05;
+										 this.r = random(60, 70);
+										if(score >= 40)
+										{
+											this.fadeR = random(50, 100);
+											this.fadeB = random(50, 100);
+											this.fadeG = random(50, 100);
+												if(score >= 50)
+												{
+													this.xspeed = this.xspeed * 1.05;
+													this.yspeed = this.yspeed * 1.05;
+
+													this.fadeR = random(10, 25);
+													this.fadeB = random(10, 25);
+													this.fadeG = random(10, 25);
+
+													this.r = random(40, 50);
+															if(score >= 60)
+															{
+																this.xspeed = this.xspeed * 1.05;
+																this.yspeed = this.yspeed * 1.05;
+
+																this.fadeR = random(50, 100);
+																this.fadeB = random(50, 100);
+																this.fadeG = random(50, 100);
+
+																if(score >= 70)
+																{
+																	this.fadeR = random(5, 15);
+																	this.fadeB = random(5, 15);
+																	this.fadeG = random(5, 15);
+
+																	if(score >= 80)
+																	{
+																		this.xspeed = this.xspeed * 1.05;
+																		this.yspeed = this.yspeed * 1.05;
+
+																		this.fadeR = random(1, 10);
+																		this.fadeB = random(1, 10);
+																		this.fadeG = random(1, 10);
+
+																		if(score >= 90)
+																		{
+																			this.fadeR = 7;
+																			this.fadeB = 7;
+																			this.fadeG = 7;
+																			if(score >= 100)
+																			{
+																				this.xspeed = this.xspeed * 1.05;
+																				this.yspeed = this.yspeed * 1.05;
+
+																				this.fadeR = 5;
+																				this.fadeB = 5;
+																				this.fadeG = 5;
+																				if(score >= 110)
+																				{
+																					this.fadeR = 3;
+																					this.fadeB = 3;
+																					this.fadeG = 3;
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+													}
+												}
+										}
+									}
+							}
+						}
+				}
+				else
+				{
+					if(score => 0)
+					{
+						if(score >= 5)
+						{
+							this.xspeed = this.xspeed * 1.05;
+							this.yspeed = this.yspeed * 1.05;
+							this.r = random(70, 80);
+							if(score >= 10)
+							{
+								this.fadeR = random(100, 150);
+								this.fadeB = random(100, 150);
+								this.fadeG = random(100, 150);
+									if(score >= 15)
+									{
+										this.xspeed = this.xspeed * 1.05;
+										this.yspeed = this.yspeed * 1.05;
+										 this.r = random(60, 70);
+										if(score >= 20)
+										{
+											this.fadeR = random(50, 100);
+											this.fadeB = random(50, 100);
+											this.fadeG = random(50, 100);
+												if(score >= 25)
+												{
+													this.xspeed = this.xspeed * 1.05;
+													this.yspeed = this.yspeed * 1.05;
+
+													this.fadeR = random(10, 25);
+													this.fadeB = random(10, 25);
+													this.fadeG = random(10, 25);
+
+													this.r = random(40, 50);
+															if(score >= 35)
+															{
+																this.xspeed = this.xspeed * 1.05;
+																this.yspeed = this.yspeed * 1.05;
+
+																this.fadeR = random(50, 100);
+																this.fadeB = random(50, 100);
+																this.fadeG = random(50, 100);
+
+																if(score >= 40)
+																{
+																	this.fadeR = random(5, 15);
+																	this.fadeB = random(5, 15);
+																	this.fadeG = random(5, 15);
+
+																	if(score >= 40)
+																	{
+																		this.xspeed = this.xspeed * 1.05;
+																		this.yspeed = this.yspeed * 1.05;
+
+																		this.fadeR = random(1, 10);
+																		this.fadeB = random(1, 10);
+																		this.fadeG = random(1, 10);
+
+																		if(score >= 45)
+																		{
+																			this.fadeR = 7;
+																			this.fadeB = 7;
+																			this.fadeG = 7;
+																			if(score >= 50)
+																			{
+																				this.xspeed = this.xspeed * 1.05;
+																				this.yspeed = this.yspeed * 1.05;
+
+																				this.fadeR = 5;
+																				this.fadeB = 5;
+																				this.fadeG = 5;
+																				if(score >= 55)
+																				{
+																					this.fadeR = 3;
+																					this.fadeB = 3;
+																					this.fadeG = 3;
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+													}
+												}
+										}
+									}
+							}
+						}
+				}
+			}
+			else 	if(mouseX > width - 125 && mouseY > height - 125)
+			{
+
 			}
 			else
 			{

@@ -6,23 +6,22 @@ let speed = 2;
 var menuTheme;
 var volumeButton;
 var muteButton;
-var isMuted = new Boolean(false);
+var volumeControl = 0;
 
 function preload()
 {
-	menuTheme = loadSound("./Assets/Sounds/theme 1.wav");
+	menuTheme = loadSound("./Assets/Sounds/theme 1.mp3");
 	Unmute = loadImage ("./Assets/Images/VolumeButton2.png");
 	Mute = loadImage ("./Assets/Images/VolumeButton1.png");
 
 	star = new Star();
 }
 
-
 function setup()
 {
   document.body.style.overflow = 'hidden';
   createCanvas(windowWidth, windowHeight);
-
+	sessionStorage.setItem("volumeControl", 0)
 	menuTheme.setVolume(0.1);
 	menuTheme.loop();
 
@@ -102,21 +101,19 @@ function clicked()
 {
 	if(mouseX > width - 125 && mouseY > height - 125)
 		{
-			if(this.isMuted == false)
+			if(sessionStorage.getItem("volumeControl") == 0)
 			{
-				menuTheme.setVolume(0);
-				this.isMuted = true;
-				console.log(this.isMuted);
-        localStorage.setItem("volumeValue", this.isMuted);
+				theme.setVolume(0);
+				sessionStorage.setItem("volumeControl", 1);
 				Mute = loadImage ("./Assets/Images/VolumeButton2.png");
 			}
 			else
 			{
-				menuTheme.setVolume(0.1);
-				this.isMuted = false;
-				console.log(this.isMuted);
-        localStorage.setItem("volumeValue", this.isMuted);
+				theme.setVolume(0.1);
+				sessionStorage.setItem("volumeControl", 0);
 				Mute = loadImage ("./Assets/Images/VolumeButton1.png");
 			}
 		}
+
+			console.log(sessionStorage.getItem("volumeControl"));
 }
